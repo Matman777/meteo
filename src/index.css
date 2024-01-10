@@ -102,26 +102,36 @@ main {
   text-shadow: 3px 6px rgba(50, 50, 70, 0.5);
 }
 
+.snow {
+  background-image: url('./assets/snow.png');
+  background-size: cover;
+}
+
+.mist {
+  background-image: url('./assets/fog.png');
+  background-size: cover;
+}
+
 .clouds {
-  background-image: url('./assets/clouds.jpg');
+  background-image: url('./assets/clouds.png');
   background-size: cover;
 }
 
 .rain {
-  background-image: url('./assets/rain.jpg');
+  background-image: url('./assets/rain.png');
   background-size: cover;
 }
 
 .thunderstorm {
-  background-image: url('./assets/storm.jpg');
+  background-image: url('./assets/storm.png');
   background-size: cover;
 }
 
 .clear {
-  background-image: url('./assets/beach.jpg');
+  background-image: url('./assets/clear.png');
   background-size: cover;
 }
 
-.cold {
-  background-image: url('./assets/cold.jpg');
+.base {
+  background-image: url('./assets/base.png');
 }

@@ -2,7 +2,28 @@ import React, { useState, useEffect } from "react";
 import './index.css';
 
 
+// API call for the list of towns/countries
+const url = 'https://wft-geo-db.p.rapidapi.com/v1/geo/adminDivisions';
+const options = {
+	method: 'GET',
+	headers: {
+		'X-RapidAPI-Key': 'SIGN-UP-FOR-KEY',
+		'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
+	}
+};
 
+try {
+	const response = await fetch(url, options);
+	const result = await response.text();
+	console.log(result);
+} catch (error) {
+	console.error(error);
+}
+
+
+
+
+// API call for the weather
 const api = {
   key: "3dd8ffa94db3f7bd6b6e9e7f1abb5f38",
   base: "https://api.openweathermap.org/data/2.5/weather"
@@ -13,6 +34,8 @@ const weatherDescriptions = {
   "Clouds": "Nuageux",
   "Rain": "Pluie",
   "Thunderstorm": "Orageux",
+  "Mist": "Brouillard",
+  "Snow": "Neige"
 };
 
 
@@ -25,7 +48,7 @@ function App() {
   useEffect(() => {
     if (typeof weather.weather !== "undefined") {
       // Supprime toutes les classes de condition météorologique existantes
-      document.body.classList.remove("clouds", "rain", "thunderstorm", "clear");
+      document.body.classList.remove("clouds", "rain", "thunderstorm", "clear", "mist", "snow");
       
       // Ajoute la nouvelle classe basée sur la condition météorologique actuelle
       document.body.classList.add(weather.weather[0].main.toLowerCase());
@@ -37,7 +60,7 @@ function App() {
 
   function search(evt) {
     if (evt.key === "Enter") {
-      fetch(`${api.base}?q=${query}&units=metric&APPID=${api.key}`)
+      fetch(`${api.base}?q=${query.trim()}&units=metric&APPID=${api.key}`)
         .then(res => res.json())
         .then(result => {
           setWeather(result);
@@ -61,7 +84,7 @@ function App() {
 
 
   return (
-    <div className={`app ${(!weather.main || typeof weather.main === "undefined") ? 'cold' : ''}`}>
+    <div className={`app ${(!weather.main || typeof weather.main === "undefined") ? 'base' : ''}`}>
       <main>
         <div className="search-box">
           <input 
