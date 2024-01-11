@@ -57,7 +57,7 @@ const weatherDescriptions = {
 
 function App() {
   
-  const [query, setQuery] = useState('');
+  // const [query, setQuery] = useState('');
   const [weather, setWeather] = useState ({});
   const [address, setAddress] = useState('');
 
@@ -128,22 +128,36 @@ function App() {
     return `${day} ${date} ${month} ${year}`
   }
 
-
+  // eslint-disable-next-line no-unused-vars
   const [location, setLocation] = useState({ latitude: null, longitude: null });
+  // eslint-disable-next-line no-unused-vars
   const [locationError, setLocationError] = useState(null);
   const [isGeoLocationActive, setIsGeoLocationActive] = useState(false);
 
 
+  // const toggleGeoLocation = () => {
+  //   if (!isGeoLocationActive) {
+  //     // Si la géolocalisation n'est pas active, activez-la et obtenez la position
+  //     getLocation(setLocation, setLocationError, setWeather, setErrorMsg, api);
+  //   } else {
+  //     // Si la géolocalisation est active, désactivez-la
+  //     setLocation({ latitude: null, longitude: null });
+  //     setLocationError(null);
+  //     setWeather({});
+  //     // Vous pourriez également réinitialiser l'état de la météo ici si nécessaire
+  //   }
+  //   setIsGeoLocationActive(!isGeoLocationActive);
+  // };
+
+
   const toggleGeoLocation = () => {
     if (!isGeoLocationActive) {
-      // Si la géolocalisation n'est pas active, activez-la et obtenez la position
-      getLocation(setLocation, setLocationError, setWeather, setErrorMsg, api);
+      // Active la géolocalisation et obtient la position
+      getLocation(setLocation, setLocationError, setWeather, setErrorMsg, api); // Supprimez setLocation et setLocationError si non utilisés
     } else {
-      // Si la géolocalisation est active, désactivez-la
-      setLocation({ latitude: null, longitude: null });
-      setLocationError(null);
+      // Désactive la géolocalisation
       setWeather({});
-      // Vous pourriez également réinitialiser l'état de la météo ici si nécessaire
+      // Réinitialisez d'autres états ici si nécessaire
     }
     setIsGeoLocationActive(!isGeoLocationActive);
   };
