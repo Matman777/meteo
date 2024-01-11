@@ -187,6 +187,15 @@ function App() {
               <div>
                 <input {...getInputProps({ placeholder: "Rechercher une ville", className: 'search-bar' })} />
                 <div>
+                  
+
+                <button 
+                  className="clear-button" 
+                  onClick={() => setAddress('')}>
+                  Effacer ma recherche X
+                </button>
+
+
                   {loading && <div>Chargement...</div>}
                   {suggestions.map(suggestion => {
                     const style = suggestion.active ? { backgroundColor: '#a8a8a8', cursor: 'pointer' } : { backgroundColor: '#ffffff', cursor: 'pointer' };
