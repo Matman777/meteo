@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
+import PlacesAutocomplete from 'react-places-autocomplete';
 import './index.css';
 import { getLocation } from "./geoLoc";
 import Card from "./Card";
+// import SearchBar from "./AutoComplete";
 
 
 // API call for the list of towns/countries
@@ -57,7 +59,27 @@ function App() {
   
   const [query, setQuery] = useState('');
   const [weather, setWeather] = useState ({});
+  const [address, setAddress] = useState('');
 
+  const handleSelect = async (address) => {
+    setAddress(address);
+    const cityName = address.split(',')[0]; // Extrait le nom de la ville de l'adresse sélectionnée
+    try {
+      const weatherResponse = await fetch(`${api.base}?q=${cityName.trim()}&units=metric&APPID=${api.key}`);
+      const weatherData = await weatherResponse.json();
+      if (weatherData.cod !== "404") {
+        setWeather(weatherData);
+        setErrorMsg('');
+      } else {
+        setErrorMsg("Aucune ville n'a été trouvée..");
+        setWeather({});
+      }
+    } catch (error) {
+      console.error("Erreur lors de la recherche de la ville: ", error);
+      setErrorMsg("Erreur lors de la recherche de la ville");
+    }
+  };
+  
 
   useEffect(() => {
     if (typeof weather.weather !== "undefined") {
@@ -72,26 +94,26 @@ function App() {
 
   const [errorMsg, setErrorMsg] = useState('');
 
-  function search(evt) {
-    if (evt.key === "Enter") {
-      fetch(`${api.base}?q=${query.trim()}&units=metric&APPID=${api.key}`)
-        .then(res => res.json())
-        .then(result => {
-          if (result.cod === "404") { // Vérifiez le code de réponse de l'API
-            setErrorMsg("Aucune ville n'a été trouvée..");
-            setWeather({});
-          } else {
-            setWeather(result);
-            setErrorMsg(''); // Réinitialisez le message d'erreur si une ville est trouvée
-          }
-          setQuery('');
-        })
-        .catch(error => {
-          // Gérer les erreurs de requête ici
-          setErrorMsg("Erreur lors de la recherche de la ville");
-        });
-    }
-  }
+  // function search(evt) {
+  //   if (evt.key === "Enter") {
+  //     fetch(`${api.base}?q=${query.trim()}&units=metric&APPID=${api.key}`)
+  //       .then(res => res.json())
+  //       .then(result => {
+  //         if (result.cod === "404") { // Vérifiez le code de réponse de l'API
+  //           setErrorMsg("Aucune ville n'a été trouvée..");
+  //           setWeather({});
+  //         } else {
+  //           setWeather(result);
+  //           setErrorMsg(''); // Réinitialisez le message d'erreur si une ville est trouvée
+  //         }
+  //         setQuery('');
+  //       })
+  //       .catch(error => {
+  //         // Gérer les erreurs de requête ici
+  //         setErrorMsg("Erreur lors de la recherche de la ville");
+  //       });
+  //   }
+  // }
 
   const dateBuilder = (d) => {
     let months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", 
@@ -135,7 +157,7 @@ function App() {
     
        
       <main>
-        <div className="search-box">
+        {/* <div className="search-box">
           <input 
             type="text"
             className="search-bar"
@@ -143,7 +165,24 @@ function App() {
             onChange={e => setQuery(e.target.value)}
             value={query}
             onKeyPress={search}
-          />
+          /> */}
+
+<div className="search-box">
+          <PlacesAutocomplete value={address} onChange={setAddress} onSelect={handleSelect}>
+            {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+              <div>
+                <input {...getInputProps({ placeholder: "Rechercher une ville", className: 'search-bar' })} />
+                <div>
+                  {loading && <div>Chargement...</div>}
+                  {suggestions.map(suggestion => {
+                    const style = suggestion.active ? { backgroundColor: '#a8a8a8', cursor: 'pointer' } : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                    return <div {...getSuggestionItemProps(suggestion, { style })}>{suggestion.description}</div>;
+                  })}
+                </div>
+              </div>
+            )}
+          </PlacesAutocomplete>
+          
           
           <button onClick={toggleGeoLocation}>
           {isGeoLocationActive ? "Arrêter la géo-localisation" : "Me localiser"}
@@ -155,7 +194,7 @@ function App() {
         {isWeatherEmpty && (
         <div className="centered-container">
         <Card 
-          title="Rapid Météo" 
+          title="Easy Météo" 
           description="Obtenez la météo d'une ville grâce à la barre de recherche en haut de l'écran." 
         />
       </div>
