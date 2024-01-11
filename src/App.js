@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import './index.css';
-
 import { getLocation } from "./geoLoc";
+import Card from "./Card";
 
 
 // API call for the list of towns/countries
@@ -62,7 +62,7 @@ function App() {
   useEffect(() => {
     if (typeof weather.weather !== "undefined") {
       // Supprime toutes les classes de condition météorologique existantes
-      document.body.classList.remove("clouds", "rain", "thunderstorm", "clear", "mist", "snow");
+      document.body.classList.remove("clouds", "rain", "thunderstorm", "clear", "mist", "snow", "fog", "haze");
       
       // Ajoute la nouvelle classe basée sur la condition météorologique actuelle
       document.body.classList.add(weather.weather[0].main.toLowerCase());
@@ -70,15 +70,25 @@ function App() {
   }, [weather]);
 
 
-
+  const [errorMsg, setErrorMsg] = useState('');
 
   function search(evt) {
     if (evt.key === "Enter") {
       fetch(`${api.base}?q=${query.trim()}&units=metric&APPID=${api.key}`)
         .then(res => res.json())
         .then(result => {
-          setWeather(result);
+          if (result.cod === "404") { // Vérifiez le code de réponse de l'API
+            setErrorMsg("Aucune ville n'a été trouvée..");
+            setWeather({});
+          } else {
+            setWeather(result);
+            setErrorMsg(''); // Réinitialisez le message d'erreur si une ville est trouvée
+          }
           setQuery('');
+        })
+        .catch(error => {
+          // Gérer les erreurs de requête ici
+          setErrorMsg("Erreur lors de la recherche de la ville");
         });
     }
   }
@@ -105,7 +115,7 @@ function App() {
   const toggleGeoLocation = () => {
     if (!isGeoLocationActive) {
       // Si la géolocalisation n'est pas active, activez-la et obtenez la position
-      getLocation(setLocation, setLocationError, setWeather, api);
+      getLocation(setLocation, setLocationError, setWeather, setErrorMsg, api);
     } else {
       // Si la géolocalisation est active, désactivez-la
       setLocation({ latitude: null, longitude: null });
@@ -118,9 +128,12 @@ function App() {
   
 
 
-
+  const isWeatherEmpty = !weather.main;
   return (
+    
     <div className={`app ${(!weather.main || typeof weather.main === "undefined") ? 'base' : ''}`}>
+    
+       
       <main>
         <div className="search-box">
           <input 
@@ -131,12 +144,22 @@ function App() {
             value={query}
             onKeyPress={search}
           />
-
+          
           <button onClick={toggleGeoLocation}>
           {isGeoLocationActive ? "Arrêter la géo-localisation" : "Me localiser"}
         </button>
-
         </div>
+        
+
+        {errorMsg && <p className="error-message">{errorMsg}</p>}
+        {isWeatherEmpty && (
+        <div className="centered-container">
+        <Card 
+          title="Rapid Météo" 
+          description="Obtenez la météo d'une ville grâce à la barre de recherche en haut de l'écran." 
+        />
+      </div>
+      )}
         {(typeof weather.main != "undefined") ? (
         <div>
           <div className="location-box">

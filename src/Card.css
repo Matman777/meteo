@@ -1,0 +1,38 @@
+.centered-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    font-size: 1.3em;
+    
+    
+  }
+
+
+.card {
+    background-color: rgb(246, 226, 242);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin: 20px;
+    max-width: 600px;
+    margin-top: 150px;
+    opacity: 0.7;
+  }
+  
+  .card h2 {
+    margin-bottom: 10px;
+    color: black;
+    font-size: 1.5em;
+  }
+  
+  .card p {
+    color: black;
+    font-size: 1.2em;
+    font-style: italic;
+  }
+  
+
+  
+  
