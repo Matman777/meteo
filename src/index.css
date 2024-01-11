@@ -9,11 +9,9 @@ body {
 }
 
 .app {
-  /* background-image: url('./assets/cold.jpg'); */
   background-size: cover;
   background-position: bottom;
   transition: 0.4 ease;
-  
 }
 
 
@@ -32,7 +30,6 @@ main {
   display: block;
   width: 100%;
   padding: 15px;
-
   appearance: none;
   background: none;
   border: none;
@@ -76,6 +73,25 @@ main {
   text-align: center;
 }
 
+button {
+  background-color: rgb(178, 243, 229);
+  display: inline-block;
+  margin-top: 20px;
+  border-radius: 10px;
+  font-size: 1em;
+  padding: 5px 20px;
+  cursor: pointer;
+  border: none;
+  opacity: 0.7;
+  font-weight: bold;
+  transition: background-color 0.4s ease;
+}
+
+button:hover {
+  background-color: rgb(25, 223, 180);
+}
+
+
 .weather-box .temp {
   position: relative;
   display: inline-block;
@@ -98,7 +114,6 @@ main {
   color: #fff;
   font-size: 48px;
   font-weight: 700;
-
   text-shadow: 3px 6px rgba(50, 50, 70, 0.5);
 }
 
@@ -108,6 +123,17 @@ main {
 }
 
 .mist {
+  background-image: url('./assets/fog.png');
+  background-size: cover;
+}
+
+.haze {
+  background-image: url('./assets/haze.png');
+  background-size: cover;
+}
+
+
+.fog {
   background-image: url('./assets/fog.png');
   background-size: cover;
 }
