@@ -1,16 +1,28 @@
 import React, { useState, useEffect } from "react";
 import './index.css';
 
+import { getLocation } from "./geoLoc";
+
 
 // API call for the list of towns/countries
-const url = 'https://wft-geo-db.p.rapidapi.com/v1/geo/adminDivisions';
+// const url = 'https://wft-geo-db.p.rapidapi.com/v1/geo/adminDivisions';
+// const options = {
+// 	method: 'GET',
+// 	headers: {
+// 		'X-RapidAPI-Key': 'SIGN-UP-FOR-KEY',
+// 		'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
+// 	}
+// };
+
+const url = 'https://world-geo-data.p.rapidapi.com/countries/US?language=en%2Cru%2Czh%2Ces%2Car%2Cfr%2Cfa%2Cja%2Cpl%2Cit%2Cpt%2Cde';
 const options = {
 	method: 'GET',
 	headers: {
-		'X-RapidAPI-Key': 'SIGN-UP-FOR-KEY',
+		'X-RapidAPI-Key': '558aea09d6msh9263c542b38d770p18aa5ajsn7d117b900c9a',
 		'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
 	}
 };
+
 
 try {
 	const response = await fetch(url, options);
@@ -35,12 +47,14 @@ const weatherDescriptions = {
   "Rain": "Pluie",
   "Thunderstorm": "Orageux",
   "Mist": "Brouillard",
-  "Snow": "Neige"
+  "Snow": "Neige",
+  "Fog": "Brouillard",
+  "Haze": "Brume"
 };
 
 
 function App() {
-
+  
   const [query, setQuery] = useState('');
   const [weather, setWeather] = useState ({});
 
@@ -83,6 +97,28 @@ function App() {
   }
 
 
+  const [location, setLocation] = useState({ latitude: null, longitude: null });
+  const [locationError, setLocationError] = useState(null);
+  const [isGeoLocationActive, setIsGeoLocationActive] = useState(false);
+
+
+  const toggleGeoLocation = () => {
+    if (!isGeoLocationActive) {
+      // Si la géolocalisation n'est pas active, activez-la et obtenez la position
+      getLocation(setLocation, setLocationError, setWeather, api);
+    } else {
+      // Si la géolocalisation est active, désactivez-la
+      setLocation({ latitude: null, longitude: null });
+      setLocationError(null);
+      setWeather({});
+      // Vous pourriez également réinitialiser l'état de la météo ici si nécessaire
+    }
+    setIsGeoLocationActive(!isGeoLocationActive);
+  };
+  
+
+
+
   return (
     <div className={`app ${(!weather.main || typeof weather.main === "undefined") ? 'base' : ''}`}>
       <main>
@@ -90,11 +126,16 @@ function App() {
           <input 
             type="text"
             className="search-bar"
-            placeholder="Recherchez une ville ou un pays..."
+            placeholder="Rechercher une ville"
             onChange={e => setQuery(e.target.value)}
             value={query}
             onKeyPress={search}
           />
+
+          <button onClick={toggleGeoLocation}>
+          {isGeoLocationActive ? "Arrêter la géo-localisation" : "Me localiser"}
+        </button>
+
         </div>
         {(typeof weather.main != "undefined") ? (
         <div>
@@ -113,6 +154,12 @@ function App() {
           </div>
         </div>
         ) : ('')}
+        {/* {locationError && <p className="error-message">{locationError}</p>}
+        {location.latitude && location.longitude && (
+        <p className="location-coords">
+          Latitude: {location.latitude}, Longitude: {location.longitude}
+        </p>
+      )} */}
       </main>
     </div>
   );
