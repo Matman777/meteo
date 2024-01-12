@@ -245,6 +245,12 @@ function App() {
           Latitude: {location.latitude}, Longitude: {location.longitude}
         </p>
       )} */}
+      <footer>
+        <div className="foot">
+        <div>Easy Météo</div>
+        <div>© 2024 Matman. Tous droits réservés</div>
+        </div>
+      </footer>
       </main>
     </div>
   );

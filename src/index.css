@@ -6,6 +6,7 @@
 
 body {
   font-family: 'montseratt', sans-serif;
+  background-position: fixed;
 }
 
 .app {
@@ -53,7 +54,6 @@ main {
 
 .clear-button {
   border: none;
-  /* background: transparent; */
   cursor: pointer;
 }
 
@@ -174,3 +174,25 @@ button:hover {
 .base {
   background-image: url('./assets/base.png');
 }
+
+footer {
+  position: fixed;
+  bottom: 0;
+  background-color: black;
+  color: white;
+  width: 100%;
+  left: 0;
+  opacity: 0.8;
+}
+
+.foot {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+/* footer, .foot {
+  margin: 0;
+  padding: 0;
+} */
