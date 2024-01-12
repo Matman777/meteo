@@ -178,11 +178,12 @@ button:hover {
 footer {
   position: fixed;
   bottom: 0;
-  background-color: black;
+  background-color: rgb(48, 47, 47);
   color: white;
   width: 100%;
   left: 0;
   opacity: 0.8;
+  white-space: nowrap;
 }
 
 .foot {
